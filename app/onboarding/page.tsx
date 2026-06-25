@@ -78,7 +78,9 @@ export default function OnboardingPage() {
       primaryBirthCard: birthCard.primary,
       secondaryBirthCard: birthCard.secondary,
       deckPreference: "classic",
-      isPremium: false,
+      isPurchased: false,
+      tokens: 0,
+      freeTrialUsed: 0,
       createdAt: new Date().toISOString(),
       streak: 0,
     };

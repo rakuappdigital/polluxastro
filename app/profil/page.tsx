@@ -213,7 +213,7 @@ export default function ProfilPage() {
         </div>
 
         {/* Premium CTA */}
-        {!profile.isPremium && (
+        {!!profile.isPurchased && (
           <div
             className="rounded-2xl p-5 mb-6"
             style={{
@@ -267,8 +267,8 @@ export default function ProfilPage() {
             </div>
             <div className="flex justify-between">
               <span style={{ color: "var(--text-muted)" }}>Plan</span>
-              <span style={{ color: profile.isPremium ? "var(--gold)" : "var(--text-secondary)" }}>
-                {profile.isPremium ? "Premium ✦" : "Ücretsiz"}
+              <span style={{ color: !profile.isPurchased ? "var(--gold)" : "var(--text-secondary)" }}>
+                {!profile.isPurchased ? "Satın Alındı ✦" : "Ücretsiz"}
               </span>
             </div>
           </div>
