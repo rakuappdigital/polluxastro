@@ -22,11 +22,11 @@ const ELEMENTS = [
 ];
 
 const MOODS = [
-  { value: 1, icon: "/icons/mood-1.png" },
-  { value: 2, icon: "/icons/mood-2.png" },
-  { value: 3, icon: "/icons/mood-3.png" },
-  { value: 4, icon: "/icons/mood-4.png" },
-  { value: 5, icon: "/icons/mood-5.png" },
+  { value: 1, icon: "/icons/mod1.png" },
+  { value: 2, icon: "/icons/mod2.png" },
+  { value: 3, icon: "/icons/mod3.png" },
+  { value: 4, icon: "/icons/mod4.png" },
+  { value: 5, icon: "/icons/mod5.png" },
 ];
 
 type Phase =

@@ -10,7 +10,7 @@ import { tr } from "date-fns/locale";
 import { TAROT_CARDS } from "@/lib/tarot-data";
 import Image from "next/image";
 
-const MOOD_ICONS = ["", "/icons/mood-1.png", "/icons/mood-2.png", "/icons/mood-3.png", "/icons/mood-4.png", "/icons/mood-5.png"];
+const MOOD_ICONS = ["", "/icons/mod1.png", "/icons/mod2.png", "/icons/mod3.png", "/icons/mod4.png", "/icons/mod5.png"];
 
 export default function JournalPage() {
   const [entries, setEntries] = useState<JournalEntry[]>([]);
