@@ -8,6 +8,7 @@ import Navigation from "@/components/layout/Navigation";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { TAROT_CARDS } from "@/lib/tarot-data";
+import Image from "next/image";
 
 const MOOD_EMOJIS = ["", "😔", "😟", "😐", "🙂", "✨"];
 
@@ -66,8 +67,12 @@ export default function JournalPage() {
   const SUIT_NAMES: Record<string, string> = {
     wands: "Değnekler", cups: "Kupalar", swords: "Kılıçlar", pentacles: "Pentakıllar", major: "Büyük Arkana"
   };
-  const SUIT_EMOJIS: Record<string, string> = {
-    wands: "🔥", cups: "💧", swords: "⚡", pentacles: "⭐", major: "✦"
+  const SUIT_ICONS: Record<string, string> = {
+    wands: "/icons/element-fire.png",
+    cups: "/icons/element-water.png",
+    swords: "/icons/element-air.png",
+    pentacles: "/icons/element-earth.png",
+    major: "",
   };
 
   if (selected) {
@@ -203,7 +208,13 @@ export default function JournalPage() {
               <div className="text-xs mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Ortalama Mod</div>
             </div>
             <div className="glass rounded-2xl p-3 text-center">
-              <div className="text-xl">{suitFrequency ? SUIT_EMOJIS[suitFrequency] : "✦"}</div>
+              <div className="flex justify-center">
+              {suitFrequency && SUIT_ICONS[suitFrequency] ? (
+                <Image src={SUIT_ICONS[suitFrequency]} alt={SUIT_NAMES[suitFrequency] || ""} width={26} height={26} style={{ objectFit: "contain" }} />
+              ) : (
+                <span className="text-xl" style={{ color: "var(--gold)" }}>✦</span>
+              )}
+            </div>
               <div className="text-xs mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
                 {suitFrequency ? SUIT_NAMES[suitFrequency] : "Veri yok"}
               </div>

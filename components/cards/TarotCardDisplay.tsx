@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { TarotCard } from "@/lib/tarot-data";
 
 interface TarotCardDisplayProps {
@@ -14,11 +15,11 @@ interface TarotCardDisplayProps {
   animDelay?: number;
 }
 
-const CARD_SYMBOLS: Record<string, string> = {
-  wands: "🔥",
-  cups: "💧",
-  swords: "⚡",
-  pentacles: "⭐",
+const CARD_ICONS: Record<string, string> = {
+  wands: "/icons/element-fire.png",
+  cups: "/icons/element-water.png",
+  swords: "/icons/element-air.png",
+  pentacles: "/icons/element-earth.png",
 };
 
 const MAJOR_SYMBOLS: Record<number, string> = {
@@ -116,10 +117,20 @@ export default function TarotCardDisplay({
                   }}
                 >
                   <div
-                    className="text-4xl mb-2"
-                    style={{ filter: `drop-shadow(0 0 12px ${card.color}80)` }}
+                    className="mb-2"
+                    style={{ filter: `drop-shadow(0 0 10px ${card.color}80)` }}
                   >
-                    {card.suit ? CARD_SYMBOLS[card.suit] : MAJOR_SYMBOLS[card.id] || "✦"}
+                    {card.suit && CARD_ICONS[card.suit] ? (
+                      <Image
+                        src={CARD_ICONS[card.suit]}
+                        alt={card.suit}
+                        width={size === "sm" ? 20 : size === "md" ? 28 : 36}
+                        height={size === "sm" ? 20 : size === "md" ? 28 : 36}
+                        style={{ objectFit: "contain", opacity: 0.85 }}
+                      />
+                    ) : (
+                      <span className="text-3xl" style={{ color: card.color }}>✦</span>
+                    )}
                   </div>
 
                   {/* Decorative lines */}

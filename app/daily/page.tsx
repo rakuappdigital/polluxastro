@@ -12,12 +12,13 @@ import AmbientOrbs from "@/components/ui/AmbientOrbs";
 import StarField from "@/components/ui/StarField";
 import Navigation from "@/components/layout/Navigation";
 import TarotCardDisplay from "@/components/cards/TarotCardDisplay";
+import Image from "next/image";
 
 const ELEMENTS = [
-  { id: "fire", label: "Ateş", emoji: "🔥", desc: "Enerjik, tutkulu, harekete hazır" },
-  { id: "water", label: "Su", emoji: "💧", desc: "Duygusal, sezgisel, içe dönük" },
-  { id: "air", label: "Hava", emoji: "💨", desc: "Zihinsel, analitik, meraklı" },
-  { id: "earth", label: "Toprak", emoji: "🌿", desc: "Sakin, odaklı, kararlı" },
+  { id: "fire", label: "Ateş", icon: "/icons/element-fire.png", desc: "Enerjik, tutkulu, harekete hazır" },
+  { id: "water", label: "Su", icon: "/icons/element-water.png", desc: "Duygusal, sezgisel, içe dönük" },
+  { id: "air", label: "Hava", icon: "/icons/element-air.png", desc: "Zihinsel, analitik, meraklı" },
+  { id: "earth", label: "Toprak", icon: "/icons/element-earth.png", desc: "Sakin, odaklı, kararlı" },
 ];
 
 const MOODS = [
@@ -311,7 +312,9 @@ export default function DailyPage() {
                       border: `1px solid ${selectedElement === el.id ? "rgba(212,175,95,0.4)" : "var(--border-glass)"}`,
                     }}
                   >
-                    <div className="text-xl mb-1">{el.emoji}</div>
+                    <div className="mb-1">
+                      <Image src={el.icon} alt={el.label} width={32} height={32} style={{ objectFit: "contain" }} />
+                    </div>
                     <div className="font-display-bold text-sm" style={{ color: selectedElement === el.id ? "var(--gold)" : "var(--text-primary)" }}>
                       {el.label}
                     </div>

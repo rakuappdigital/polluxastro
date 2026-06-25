@@ -8,13 +8,14 @@ import StarField from "@/components/ui/StarField";
 import Navigation from "@/components/layout/Navigation";
 import { format, startOfWeek, endOfWeek, isWithinInterval } from "date-fns";
 import { tr } from "date-fns/locale";
+import Image from "next/image";
 
-const SUIT_LABELS: Record<string, { label: string; emoji: string; color: string }> = {
-  wands: { label: "Değnekler", emoji: "🔥", color: "#E8CC7A" },
-  cups: { label: "Kupalar", emoji: "💧", color: "#8B75C6" },
-  swords: { label: "Kılıçlar", emoji: "⚡", color: "#C9818A" },
-  pentacles: { label: "Pentakıllar", emoji: "⭐", color: "#7A9E8A" },
-  major: { label: "Büyük Arkana", emoji: "✦", color: "#D4AF5F" },
+const SUIT_LABELS: Record<string, { label: string; icon: string; color: string }> = {
+  wands:    { label: "Değnekler",   icon: "/icons/element-fire.png",  color: "#E8CC7A" },
+  cups:     { label: "Kupalar",     icon: "/icons/element-water.png", color: "#8B75C6" },
+  swords:   { label: "Kılıçlar",   icon: "/icons/element-air.png",   color: "#C9818A" },
+  pentacles:{ label: "Pentakıllar", icon: "/icons/element-earth.png", color: "#7A9E8A" },
+  major:    { label: "Büyük Arkana",icon: "",                          color: "#D4AF5F" },
 };
 
 const MOOD_EMOJIS = ["", "😔", "😟", "😐", "🙂", "✨"];
@@ -146,7 +147,13 @@ export default function HafalikPage() {
                 <div className="text-xs mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Ort. Mod</div>
               </div>
               <div className="glass rounded-2xl p-3 text-center">
-                <div className="text-xl">{suit?.emoji || "✦"}</div>
+                <div className="flex justify-center">
+                  {suit?.icon ? (
+                    <Image src={suit.icon} alt={suit.label} width={28} height={28} style={{ objectFit: "contain" }} />
+                  ) : (
+                    <span className="text-xl" style={{ color: "var(--gold)" }}>✦</span>
+                  )}
+                </div>
                 <div className="text-xs mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
                   {suit?.label || "–"}
                 </div>
@@ -158,7 +165,11 @@ export default function HafalikPage() {
               <div className="glass rounded-2xl p-4 mb-5"
                 style={{ borderColor: `${suit.color}30` }}>
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">{suit.emoji}</span>
+                  {suit.icon ? (
+                    <Image src={suit.icon} alt={suit.label} width={32} height={32} style={{ objectFit: "contain" }} />
+                  ) : (
+                    <span className="text-2xl" style={{ color: suit.color }}>✦</span>
+                  )}
                   <div>
                     <div className="font-display-bold text-sm" style={{ color: suit.color }}>
                       {suit.label} haftasıydı
