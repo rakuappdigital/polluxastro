@@ -39,6 +39,9 @@ html {
 body {
   min-height: 100%;
   background-color: var(--bg-primary);
+  background-image: url('/bg-texture.svg');
+  background-size: 320px 320px;
+  background-repeat: repeat;
   color: var(--text-primary);
   font-family: 'Cormorant Garamond', 'Georgia', serif;
   -webkit-font-smoothing: antialiased;

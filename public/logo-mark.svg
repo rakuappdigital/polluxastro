@@ -1,0 +1,42 @@
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Outer ring - ince çember -->
+  <circle cx="60" cy="60" r="52" stroke="#D4AF5F" stroke-width="0.75" opacity="0.3"/>
+
+  <!-- Sol hilal -->
+  <path d="M44,60 C44,44 52,32 60,28 C50,30 38,43 38,60 C38,77 50,90 60,92 C52,88 44,76 44,60 Z"
+        fill="#D4AF5F" opacity="0.85"/>
+
+  <!-- Sağ hilal (ayna) -->
+  <path d="M76,60 C76,44 68,32 60,28 C70,30 82,43 82,60 C82,77 70,90 60,92 C68,88 76,76 76,60 Z"
+        fill="#D4AF5F" opacity="0.85"/>
+
+  <!-- Merkezi yıldız - 8 kollu asterism -->
+  <!-- Dikey uzun kol -->
+  <line x1="60" y1="47" x2="60" y2="73" stroke="#D4AF5F" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Yatay kol -->
+  <line x1="47" y1="60" x2="73" y2="60" stroke="#D4AF5F" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Çapraz kollar (kısaltılmış) -->
+  <line x1="51" y1="51" x2="69" y2="69" stroke="#D4AF5F" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+  <line x1="69" y1="51" x2="51" y2="69" stroke="#D4AF5F" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- Merkez nokta -->
+  <circle cx="60" cy="60" r="2.5" fill="#D4AF5F"/>
+
+  <!-- Dört köşe küçük yıldız noktası -->
+  <circle cx="60" cy="22" r="1.5" fill="#D4AF5F" opacity="0.6"/>
+  <circle cx="60" cy="98" r="1.5" fill="#D4AF5F" opacity="0.6"/>
+  <circle cx="22" cy="60" r="1" fill="#D4AF5F" opacity="0.4"/>
+  <circle cx="98" cy="60" r="1" fill="#D4AF5F" opacity="0.4"/>
+
+  <!-- Yatay süsleme çizgisi üst -->
+  <line x1="44" y1="22" x2="76" y2="22" stroke="#D4AF5F" stroke-width="0.5" stroke-linecap="round" opacity="0.3"/>
+  <!-- Yatay süsleme çizgisi alt -->
+  <line x1="44" y1="98" x2="76" y2="98" stroke="#D4AF5F" stroke-width="0.5" stroke-linecap="round" opacity="0.3"/>
+</svg>

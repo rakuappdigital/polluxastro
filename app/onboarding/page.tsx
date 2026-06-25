@@ -11,6 +11,7 @@ import {
 } from "@/lib/store";
 import AmbientOrbs from "@/components/ui/AmbientOrbs";
 import StarField from "@/components/ui/StarField";
+import Logo from "@/components/ui/Logo";
 
 const FOCUS_OPTIONS = [
   { id: "love", label: "Aşk & İlişkiler", icon: "♡" },
@@ -125,13 +126,10 @@ export default function OnboardingPage() {
         {/* WELCOME */}
         {step === "welcome" && (
           <div className="text-center animate-fadeInUp">
-            <div className="text-6xl mb-6 animate-float" style={{ filter: "drop-shadow(0 0 20px rgba(212,175,95,0.6))" }}>
-              ✦
+            <div className="flex justify-center mb-6 animate-float">
+              <Logo size={72} showWordmark />
             </div>
-            <h1 className="font-display text-4xl mb-3" style={{ color: "var(--text-primary)", letterSpacing: "0.08em" }}>
-              Pollux Astro
-            </h1>
-            <div className="w-16 h-px mx-auto mb-4" style={{ background: "var(--gold)" }} />
+            <div className="w-16 h-px mx-auto mb-4 mt-4" style={{ background: "linear-gradient(90deg, transparent, var(--gold), transparent)" }} />
             <p className="text-lg mb-2" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>
               Evrenin aynasında kendini keşfet
             </p>
