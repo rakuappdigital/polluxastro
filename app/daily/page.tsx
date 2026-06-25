@@ -22,11 +22,11 @@ const ELEMENTS = [
 ];
 
 const MOODS = [
-  { value: 1, emoji: "😔" },
-  { value: 2, emoji: "😟" },
-  { value: 3, emoji: "😐" },
-  { value: 4, emoji: "🙂" },
-  { value: 5, emoji: "✨" },
+  { value: 1, icon: "/icons/mood-1.png" },
+  { value: 2, icon: "/icons/mood-2.png" },
+  { value: 3, icon: "/icons/mood-3.png" },
+  { value: 4, icon: "/icons/mood-4.png" },
+  { value: 5, icon: "/icons/mood-5.png" },
 ];
 
 type Phase =
@@ -497,7 +497,7 @@ export default function DailyPage() {
                         background: mood === m.value ? "rgba(212,175,95,0.15)" : "var(--bg-glass)",
                         border: `1px solid ${mood === m.value ? "rgba(212,175,95,0.4)" : "var(--border-glass)"}`,
                       }}>
-                      <span className="text-2xl">{m.emoji}</span>
+                      <Image src={m.icon} alt={`Mood ${m.value}`} width={28} height={28} style={{ objectFit: "contain" }} />
                     </button>
                   ))}
                 </div>

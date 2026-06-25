@@ -10,7 +10,7 @@ import { tr } from "date-fns/locale";
 import { TAROT_CARDS } from "@/lib/tarot-data";
 import Image from "next/image";
 
-const MOOD_EMOJIS = ["", "😔", "😟", "😐", "🙂", "✨"];
+const MOOD_ICONS = ["", "/icons/mood-1.png", "/icons/mood-2.png", "/icons/mood-3.png", "/icons/mood-4.png", "/icons/mood-5.png"];
 
 export default function JournalPage() {
   const [entries, setEntries] = useState<JournalEntry[]>([]);
@@ -172,8 +172,8 @@ export default function JournalPage() {
           )}
 
           {selected.mood && (
-            <div className="text-center py-4">
-              <span className="text-2xl">{MOOD_EMOJIS[selected.mood]}</span>
+            <div className="flex justify-center py-4">
+              <Image src={MOOD_ICONS[selected.mood]} alt={`Mood ${selected.mood}`} width={36} height={36} style={{ objectFit: "contain" }} />
             </div>
           )}
         </div>
@@ -204,7 +204,11 @@ export default function JournalPage() {
               <div className="text-xs mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Okuma</div>
             </div>
             <div className="glass rounded-2xl p-3 text-center">
-              <div className="text-2xl">{avgMood > 0 ? MOOD_EMOJIS[Math.round(avgMood)] : "–"}</div>
+              <div className="flex justify-center">
+                {avgMood > 0
+                  ? <Image src={MOOD_ICONS[Math.round(avgMood)]} alt="avg mood" width={28} height={28} style={{ objectFit: "contain" }} />
+                  : <span className="text-2xl" style={{ color: "var(--text-muted)" }}>–</span>}
+              </div>
               <div className="text-xs mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Ortalama Mod</div>
             </div>
             <div className="glass rounded-2xl p-3 text-center">
@@ -334,7 +338,7 @@ export default function JournalPage() {
                   </div>
 
                   <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                    {entry.mood && <span className="text-lg">{MOOD_EMOJIS[entry.mood]}</span>}
+                    {entry.mood && <Image src={MOOD_ICONS[entry.mood]} alt="mood" width={22} height={22} style={{ objectFit: "contain" }} />}
                     <span className="text-xs" style={{ color: "var(--text-muted)" }}>→</span>
                   </div>
                 </div>

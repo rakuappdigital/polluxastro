@@ -18,7 +18,7 @@ const SUIT_LABELS: Record<string, { label: string; icon: string; color: string }
   major:    { label: "Büyük Arkana",icon: "",                          color: "#D4AF5F" },
 };
 
-const MOOD_EMOJIS = ["", "😔", "😟", "😐", "🙂", "✨"];
+const MOOD_ICONS = ["", "/icons/mood-1.png", "/icons/mood-2.png", "/icons/mood-3.png", "/icons/mood-4.png", "/icons/mood-5.png"];
 
 export default function HafalikPage() {
   const [aiSummary, setAiSummary] = useState("");
@@ -143,7 +143,11 @@ export default function HafalikPage() {
                 <div className="text-xs mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Okuma</div>
               </div>
               <div className="glass rounded-2xl p-3 text-center">
-                <div className="text-2xl">{avgMood > 0 ? MOOD_EMOJIS[Math.round(avgMood)] : "–"}</div>
+                <div className="flex justify-center">
+                  {avgMood > 0
+                    ? <Image src={MOOD_ICONS[Math.round(avgMood)]} alt="avg mood" width={28} height={28} style={{ objectFit: "contain" }} />
+                    : <span className="text-2xl" style={{ color: "var(--text-muted)" }}>–</span>}
+                </div>
                 <div className="text-xs mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Ort. Mod</div>
               </div>
               <div className="glass rounded-2xl p-3 text-center">
@@ -270,7 +274,7 @@ export default function HafalikPage() {
                         </span>
                       ))}
                     </div>
-                    {entry.mood && <span className="text-sm">{MOOD_EMOJIS[entry.mood]}</span>}
+                    {entry.mood && <Image src={MOOD_ICONS[entry.mood]} alt="mood" width={20} height={20} style={{ objectFit: "contain" }} />}
                   </div>
                 ))}
               </div>
