@@ -16,8 +16,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Pollux Astro — Tarot & Kehanet",
-  description: "Evrenin aynasında kendini keşfet. Kişisel tarot okumaları, günlük kartlar ve derin yolculuklar seni bekliyor.",
+  title: "Pollux Astro — Tarot & Spiritüel Rehberlik",
+  description: "Evrenin aynasında kendini keşfet. Kişisel tarot okumaları, Lyra ile AI rehberlik ve derin spiritüel yolculuklar.",
   keywords: ["tarot", "astroloji", "kehanet", "günlük kart", "spiritüel"],
   authors: [{ name: "Pollux Astro" }],
   openGraph: {
