@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { getJournal, JournalEntry } from "@/lib/store";
 import AmbientOrbs from "@/components/ui/AmbientOrbs";
-import StarField from "@/components/ui/StarField";
 import Navigation from "@/components/layout/Navigation";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
@@ -11,169 +10,100 @@ import { TAROT_CARDS } from "@/lib/tarot-data";
 import Image from "next/image";
 
 const MOOD_ICONS = ["", "/icons/mod1.png", "/icons/mod2.png", "/icons/mod3.png", "/icons/mod4.png", "/icons/mod5.png"];
+const SUIT_ICONS: Record<string, string> = {
+  wands: "/icons/suit-wands.png", cups: "/icons/suit-cups.png",
+  swords: "/icons/suit-swords.png", pentacles: "/icons/suit-pentacles.png", major: "",
+};
+const SUIT_NAMES: Record<string, string> = {
+  wands: "Değnekler", cups: "Kupalar", swords: "Kılıçlar", pentacles: "Pentakıllar", major: "Büyük Arkana"
+};
 
 export default function JournalPage() {
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [selected, setSelected] = useState<JournalEntry | null>(null);
   const [filter, setFilter] = useState<"all" | "daily" | "readings">("all");
 
-  useEffect(() => {
-    setEntries(getJournal());
-  }, []);
+  useEffect(() => { setEntries(getJournal()); }, []);
 
-  const filtered = useMemo(() => {
-    return entries.filter(e => {
-      if (filter === "daily") return e.spreadType === "daily";
-      if (filter === "readings") return e.spreadType !== "daily";
-      return true;
-    });
-  }, [entries, filter]);
+  const filtered = useMemo(() => entries.filter(e => filter === "daily" ? e.spreadType === "daily" : filter === "readings" ? e.spreadType !== "daily" : true), [entries, filter]);
 
-  // Card frequency analysis
   const cardFrequency = useMemo(() => {
     const freq: Record<string, { count: number; card: typeof TAROT_CARDS[0] }> = {};
-    entries.forEach(e => {
-      e.cards?.forEach(c => {
-        const id = c.card.id;
-        if (!freq[id]) freq[id] = { count: 0, card: TAROT_CARDS.find(t => t.id === id) || c.card };
-        freq[id].count++;
-      });
-    });
+    entries.forEach(e => e.cards?.forEach(c => {
+      const id = c.card.id;
+      if (!freq[id]) freq[id] = { count: 0, card: TAROT_CARDS.find(t => t.id === id) || c.card };
+      freq[id].count++;
+    }));
     return Object.values(freq).sort((a, b) => b.count - a.count).slice(0, 5);
   }, [entries]);
 
-  // Mood average
-  const avgMood = useMemo(() => {
-    const moods = entries.filter(e => e.mood).map(e => e.mood);
-    if (!moods.length) return 0;
-    return moods.reduce((a, b) => a + b, 0) / moods.length;
-  }, [entries]);
+  const avgMood = useMemo(() => { const m = entries.filter(e => e.mood).map(e => e.mood); return m.length ? m.reduce((a, b) => a + b, 0) / m.length : 0; }, [entries]);
 
-  // Most common suit
   const suitFrequency = useMemo(() => {
-    const suits: Record<string, number> = {};
-    entries.forEach(e => {
-      e.cards?.forEach(c => {
-        if (c.card.suit) {
-          suits[c.card.suit] = (suits[c.card.suit] || 0) + 1;
-        } else {
-          suits["major"] = (suits["major"] || 0) + 1;
-        }
-      });
-    });
-    return Object.entries(suits).sort((a, b) => b[1] - a[1])[0]?.[0];
+    const s: Record<string, number> = {};
+    entries.forEach(e => e.cards?.forEach(c => { const k = c.card.suit || "major"; s[k] = (s[k] || 0) + 1; }));
+    return Object.entries(s).sort((a, b) => b[1] - a[1])[0]?.[0];
   }, [entries]);
-
-  const SUIT_NAMES: Record<string, string> = {
-    wands: "Değnekler", cups: "Kupalar", swords: "Kılıçlar", pentacles: "Pentakıllar", major: "Büyük Arkana"
-  };
-  const SUIT_ICONS: Record<string, string> = {
-    wands: "/icons/suit-wands.png",
-    cups: "/icons/suit-cups.png",
-    swords: "/icons/suit-swords.png",
-    pentacles: "/icons/suit-pentacles.png",
-    major: "",
-  };
 
   if (selected) {
     return (
-      <main className="relative min-h-screen overflow-hidden pb-24">
+      <main className="relative min-h-screen overflow-hidden pb-28">
         <AmbientOrbs />
-        <StarField count={20} />
-        <div className="relative z-10 max-w-md mx-auto px-5 pt-12">
-          <button
-            onClick={() => setSelected(null)}
-            className="text-sm mb-4 flex items-center gap-2"
-            style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}
-          >
-            ← Günlüğe dön
+        <div className="relative z-10 max-w-md mx-auto px-6 pt-12">
+          <button onClick={() => setSelected(null)} className="text-xs uppercase tracking-widest mb-6 block"
+            style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)", background: "none", border: "none", cursor: "pointer" }}>
+            ← Arşiv
           </button>
+          <p className="text-xs uppercase tracking-widest mb-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
+            {format(new Date(selected.date), "d MMMM yyyy, EEEE", { locale: tr })}
+          </p>
+          <h2 className="font-display text-3xl gradient-gold mb-1">{selected.spreadName}</h2>
+          {selected.question && <p className="text-sm italic mb-6" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>"{selected.question}"</p>}
 
-          <div className="mb-6">
-            <p className="text-xs mb-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
-              {format(new Date(selected.date), "d MMMM yyyy, EEEE", { locale: tr })}
-            </p>
-            <h2 className="font-display text-2xl gradient-gold">{selected.spreadName}</h2>
-            {selected.question && (
-              <p className="text-sm mt-1 italic" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>
-                "{selected.question}"
-              </p>
-            )}
-          </div>
-
-          {/* Cards */}
-          <div className="glass rounded-2xl p-4 mb-4">
-            <div className="text-xs uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
-              Çekilen Kartlar
+          <div className="aether-line" />
+          <div className="aether-label">Kartlar</div>
+          {selected.cards?.map((c, i) => (
+            <div key={i} className="aether-row">
+              <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ background: c.card.color || "var(--gold)" }} />
+              <div>
+                <span className="font-display-bold text-sm" style={{ color: c.card.color || "var(--gold)" }}>{c.card.nameTR}</span>
+                {c.isReversed && <span className="text-xs ml-2" style={{ color: "var(--rose)", fontFamily: "var(--font-inter)" }}>ters</span>}
+                <span className="text-xs ml-2" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>— {c.position}</span>
+              </div>
             </div>
-            <div className="space-y-2">
-              {selected.cards?.map((c, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <div
-                    className="w-2 h-2 rounded-full flex-shrink-0"
-                    style={{ background: c.card.color || "var(--gold)" }}
-                  />
-                  <div>
-                    <span className="font-display-bold text-sm" style={{ color: c.card.color || "var(--gold)" }}>
-                      {c.card.nameTR}
-                    </span>
-                    {c.isReversed && (
-                      <span className="text-xs ml-1" style={{ color: "var(--rose)", fontFamily: "var(--font-inter)" }}>
-                        (Ters)
-                      </span>
-                    )}
-                    <span className="text-xs ml-2" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
-                      — {c.position}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
 
-          {/* AI Reading */}
           {selected.aiReading && (
-            <div className="glass-gold rounded-2xl p-4 mb-4">
-              <div className="text-xs uppercase tracking-widest mb-3" style={{ color: "var(--gold)", fontFamily: "var(--font-inter)" }}>
-                ✦ Yorum
+            <>
+              <div className="aether-line" />
+              <div className="aether-label">
+                <Image src="/icons/icon-lyra.png" alt="Lyra" width={12} height={12} style={{ objectFit: "contain" }} />
+                Lyra
               </div>
-              <p
-                className="text-sm leading-relaxed"
-                style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}
-                dangerouslySetInnerHTML={{
-                  __html: selected.aiReading.replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--gold)">$1</strong>')
-                }}
-              />
-            </div>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}
+                dangerouslySetInnerHTML={{ __html: selected.aiReading.replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--gold)">$1</strong>') }} />
+            </>
           )}
 
-          {/* Personal Note */}
           {selected.personalNote && (
-            <div className="glass rounded-2xl p-4 mb-4">
-              <div className="text-xs uppercase tracking-widest mb-2" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
-                ◗ Kişisel Notum
-              </div>
-              <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>
-                {selected.personalNote}
-              </p>
-            </div>
+            <>
+              <div className="aether-line" />
+              <div className="aether-label">Notum</div>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>{selected.personalNote}</p>
+            </>
           )}
 
-          {/* Evening Reflection */}
           {selected.eveningReflection && (
-            <div className="glass rounded-2xl p-4 mb-4">
-              <div className="text-xs uppercase tracking-widest mb-2" style={{ color: "var(--indigo-light)", fontFamily: "var(--font-inter)" }}>
-                ☽ Akşam Yansıması
-              </div>
-              <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>
-                {selected.eveningReflection}
-              </p>
-            </div>
+            <>
+              <div className="aether-line" />
+              <div className="aether-label">Akşam Yansıması</div>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>{selected.eveningReflection}</p>
+            </>
           )}
 
           {selected.mood && (
-            <div className="flex justify-center py-4">
-              <Image src={MOOD_ICONS[selected.mood]} alt={`Mood ${selected.mood}`} width={36} height={36} style={{ objectFit: "contain" }} />
+            <div className="flex items-center gap-3 mt-6">
+              <Image src={MOOD_ICONS[selected.mood]} alt="mood" width={28} height={28} style={{ objectFit: "contain" }} />
             </div>
           )}
         </div>
@@ -183,171 +113,89 @@ export default function JournalPage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden pb-24">
+    <main className="relative min-h-screen overflow-hidden pb-28">
       <AmbientOrbs />
-      <StarField count={25} />
-
-      <div className="relative z-10 max-w-md mx-auto px-5 pt-12">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="font-display text-3xl gradient-gold mb-1">Günlük</h1>
-          <p className="text-sm" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
-            {entries.length} okuma · Spiritüel yolculuğun
-          </p>
+      <div className="relative z-10 max-w-md mx-auto px-6 pt-12">
+        <div className="flex items-end justify-between mb-8">
+          <div>
+            <h1 className="font-display text-3xl" style={{ color: "var(--text-primary)" }}>Arşiv</h1>
+            <p className="text-xs mt-1 uppercase tracking-widest" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>{entries.length} okuma</p>
+          </div>
+          {avgMood > 0 && <Image src={MOOD_ICONS[Math.round(avgMood)]} alt="avg mood" width={28} height={28} style={{ objectFit: "contain" }} />}
         </div>
 
-        {/* Analytics */}
         {entries.length >= 3 && (
-          <div className="grid grid-cols-3 gap-3 mb-6">
-            <div className="glass rounded-2xl p-3 text-center">
-              <div className="font-display text-2xl gradient-gold">{entries.length}</div>
-              <div className="text-xs mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Okuma</div>
-            </div>
-            <div className="glass rounded-2xl p-3 text-center">
-              <div className="flex justify-center">
-                {avgMood > 0
-                  ? <Image src={MOOD_ICONS[Math.round(avgMood)]} alt="avg mood" width={28} height={28} style={{ objectFit: "contain" }} />
-                  : <span className="text-2xl" style={{ color: "var(--text-muted)" }}>–</span>}
+          <>
+            <div className="aether-line" />
+            <div className="flex gap-6 pb-2">
+              <div>
+                <p className="font-display text-2xl gradient-gold">{entries.length}</p>
+                <p className="text-xs uppercase tracking-widest" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Okuma</p>
               </div>
-              <div className="text-xs mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Ortalama Mod</div>
-            </div>
-            <div className="glass rounded-2xl p-3 text-center">
-              <div className="flex justify-center">
-              {suitFrequency && SUIT_ICONS[suitFrequency] ? (
-                <Image src={SUIT_ICONS[suitFrequency]} alt={SUIT_NAMES[suitFrequency] || ""} width={26} height={26} style={{ objectFit: "contain" }} />
-              ) : (
-                <span className="text-xl" style={{ color: "var(--gold)" }}>✦</span>
+              {suitFrequency && SUIT_ICONS[suitFrequency] && (
+                <div className="flex items-center gap-2">
+                  <Image src={SUIT_ICONS[suitFrequency]} alt={SUIT_NAMES[suitFrequency]} width={24} height={24} style={{ objectFit: "contain" }} />
+                  <div>
+                    <p className="text-xs" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>{SUIT_NAMES[suitFrequency]}</p>
+                    <p className="text-xs" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>dominant element</p>
+                  </div>
+                </div>
               )}
             </div>
-              <div className="text-xs mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
-                {suitFrequency ? SUIT_NAMES[suitFrequency] : "Veri yok"}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Top cards */}
-        {cardFrequency.length > 0 && (
-          <div className="glass-gold rounded-2xl p-4 mb-6">
-            <div className="text-xs uppercase tracking-widest mb-3" style={{ color: "var(--gold)", fontFamily: "var(--font-inter)" }}>
-              ✦ En Çok Çektiğin Kartlar
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {cardFrequency.map(({ card, count }) => (
-                <div
-                  key={card.id}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-full"
-                  style={{
-                    background: `${card.color}15`,
-                    border: `1px solid ${card.color}35`,
-                  }}
-                >
-                  <span className="text-xs font-display-bold" style={{ color: card.color }}>
-                    {card.nameTR}
-                  </span>
-                  <span
-                    className="text-xs w-4 h-4 rounded-full flex items-center justify-center"
-                    style={{ background: card.color, color: "#1A0A2E", fontSize: "9px", fontFamily: "var(--font-inter)" }}
-                  >
-                    {count}
-                  </span>
+            {cardFrequency.length > 0 && (
+              <>
+                <div className="aether-line" />
+                <div className="aether-label">En Çok Çekilen</div>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 mb-2">
+                  {cardFrequency.map(({ card, count }) => (
+                    <span key={card.id} className="text-sm font-display-bold" style={{ color: card.color }}>
+                      {card.nameTR}{count > 1 && <sup className="text-xs ml-0.5" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>{count}</sup>}
+                    </span>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </>
+            )}
+          </>
         )}
 
-        {/* Filter */}
-        <div className="flex gap-2 mb-6">
+        <div className="aether-line" />
+        <div className="aether-options mb-6">
           {(["all", "daily", "readings"] as const).map(f => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className="px-4 py-1.5 rounded-full text-sm transition-all"
-              style={{
-                background: filter === f ? "rgba(212,175,95,0.15)" : "var(--bg-glass)",
-                border: `1px solid ${filter === f ? "rgba(212,175,95,0.4)" : "var(--border-glass)"}`,
-                color: filter === f ? "var(--gold)" : "var(--text-muted)",
-                fontFamily: "var(--font-inter)",
-              }}
-            >
-              {f === "all" ? "Tümü" : f === "daily" ? "Günlük" : "Okumalar"}
+            <button key={f} onClick={() => setFilter(f)} className={`aether-option ${filter === f ? "active" : ""}`}>
+              <span className="aether-option-label">{f === "all" ? "Tümü" : f === "daily" ? "Günlük" : "Okumalar"}</span>
             </button>
           ))}
         </div>
 
-        {/* Entries */}
         {filtered.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="text-4xl mb-4 opacity-40">◎</div>
-            <p className="font-display text-xl mb-2" style={{ color: "var(--text-muted)" }}>
-              Henüz kayıt yok
-            </p>
-            <p className="text-sm" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
-              İlk okumana başla ve spiritüel yolculuğunu izle.
-            </p>
+          <div className="py-16 text-center">
+            <p className="font-display text-xl" style={{ color: "var(--text-muted)" }}>Henüz kayıt yok</p>
           </div>
         ) : (
-          <div className="space-y-3">
-            {filtered.map(entry => (
-              <button
-                key={entry.id}
-                onClick={() => setSelected(entry)}
-                className="w-full glass rounded-2xl p-4 text-left transition-all"
-                style={{ display: "block" }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(212,175,95,0.25)";
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.10)";
-                }}
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
-                        {format(new Date(entry.date), "d MMM", { locale: tr })}
-                      </span>
-                      <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: "rgba(212,175,95,0.1)", color: "var(--gold)", fontFamily: "var(--font-inter)" }}>
-                        {entry.spreadName}
-                      </span>
-                    </div>
-
-                    {entry.question && (
-                      <p className="text-xs mb-1 italic truncate" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>
-                        "{entry.question}"
-                      </p>
-                    )}
-
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {entry.cards?.slice(0, 3).map((c, i) => (
-                        <span
-                          key={i}
-                          className="text-xs"
-                          style={{ color: c.card.color || "var(--gold)", fontFamily: "var(--font-inter)" }}
-                        >
-                          {c.card.nameTR}{i < Math.min(2, (entry.cards?.length || 1) - 1) ? " · " : ""}
-                        </span>
-                      ))}
-                      {(entry.cards?.length || 0) > 3 && (
-                        <span className="text-xs" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
-                          +{(entry.cards?.length || 0) - 3}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                    {entry.mood && <Image src={MOOD_ICONS[entry.mood]} alt="mood" width={22} height={22} style={{ objectFit: "contain" }} />}
-                    <span className="text-xs" style={{ color: "var(--text-muted)" }}>→</span>
-                  </div>
+          filtered.map(entry => (
+            <button key={entry.id} onClick={() => setSelected(entry)} className="aether-spread-row w-full text-left">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="text-xs flex-shrink-0" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
+                    {format(new Date(entry.date), "d MMM", { locale: tr })}
+                  </span>
+                  <span className="text-xs" style={{ color: "var(--gold)", fontFamily: "var(--font-inter)" }}>{entry.spreadName}</span>
                 </div>
-              </button>
-            ))}
-          </div>
+                {entry.question && <p className="text-xs italic truncate" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>"{entry.question}"</p>}
+                <div className="flex gap-2 mt-1 flex-wrap">
+                  {entry.cards?.slice(0, 3).map((c, i) => (
+                    <span key={i} className="text-xs font-display-bold" style={{ color: c.card.color }}>{c.card.nameTR}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {entry.mood && <Image src={MOOD_ICONS[entry.mood]} alt="mood" width={18} height={18} style={{ objectFit: "contain" }} />}
+                <span style={{ color: "var(--text-muted)", fontSize: "11px" }}>→</span>
+              </div>
+            </button>
+          ))
         )}
       </div>
-
       <Navigation />
     </main>
   );

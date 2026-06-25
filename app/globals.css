@@ -213,6 +213,261 @@ body {
     );
 }
 
+/* ═══════════════════════════════════════
+   AETHER DESIGN SYSTEM
+   Kutucuk yok — boşluk ve çizgi hiyerarşisi
+   ═══════════════════════════════════════ */
+
+/* Bölüm ayırıcı çizgi */
+.aether-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,95,0.25), transparent);
+  margin: 24px 0;
+}
+
+/* Bölüm başlığı */
+.aether-label {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.aether-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(212,175,95,0.2), transparent);
+}
+
+/* Alt çizgili input */
+.input-aether {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  color: var(--text-primary);
+  padding: 10px 0;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 15px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s;
+  border-radius: 0;
+}
+
+.input-aether:focus {
+  border-bottom-color: rgba(212,175,95,0.6);
+}
+
+.input-aether::placeholder {
+  color: var(--text-muted);
+}
+
+textarea.input-aether {
+  resize: none;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  padding: 10px 0;
+  min-height: 60px;
+}
+
+/* Ana buton */
+.btn-aether {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(212,175,95,0.35);
+  color: var(--gold);
+  padding: 16px 24px;
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s;
+  border-radius: 0;
+  text-align: center;
+  display: block;
+}
+
+.btn-aether:hover {
+  background: rgba(212,175,95,0.06);
+  border-color: rgba(212,175,95,0.6);
+}
+
+.btn-aether:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* Altın dolu buton */
+.btn-aether-solid {
+  width: 100%;
+  background: rgba(212,175,95,0.1);
+  border: 1px solid rgba(212,175,95,0.5);
+  color: var(--gold);
+  padding: 16px 24px;
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s;
+  border-radius: 0;
+  text-align: center;
+  display: block;
+}
+
+.btn-aether-solid:hover {
+  background: rgba(212,175,95,0.18);
+}
+
+.btn-aether-solid:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* Ghost link butonu */
+.btn-aether-ghost {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 8px 0;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+  text-align: center;
+  display: block;
+  width: 100%;
+}
+
+.btn-aether-ghost:hover {
+  color: var(--text-secondary);
+}
+
+/* Element / seçenek satırı */
+.aether-options {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.aether-option {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: -1px;
+}
+
+.aether-option.active {
+  border-bottom-color: var(--gold);
+}
+
+.aether-option-label {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+
+.aether-option.active .aether-option-label {
+  color: var(--gold);
+}
+
+/* Mood satırı */
+.aether-moods {
+  display: flex;
+  gap: 0;
+  justify-content: space-between;
+}
+
+.aether-mood {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 4px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.aether-mood.active {
+  border-bottom-color: var(--gold);
+}
+
+/* Okuma kartı liste satırı */
+.aether-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.aether-row:last-child {
+  border-bottom: none;
+}
+
+/* Büyük alıntı / yorum bloğu */
+.aether-reading {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+  padding: 20px 0;
+}
+
+/* Spread seçim satırı */
+.aether-spread-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: opacity 0.2s;
+  background: transparent;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  width: 100%;
+  text-align: left;
+}
+
+.aether-spread-row:hover {
+  opacity: 0.8;
+}
+
+.aether-spread-row:first-child {
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
 /* Selection */
 ::selection {
   background: rgba(212, 175, 95, 0.25);

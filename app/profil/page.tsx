@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getProfile, saveProfile, getJournal, UserProfile } from "@/lib/store";
 import AmbientOrbs from "@/components/ui/AmbientOrbs";
-import StarField from "@/components/ui/StarField";
 import Navigation from "@/components/layout/Navigation";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
@@ -12,10 +11,19 @@ import { getMoonPhase } from "@/lib/tarot-data";
 import Image from "next/image";
 
 const DECK_OPTIONS = [
-  { id: "classic", label: "Klasik", desc: "Rider-Waite-Smith geleneği", icon: "✦" },
-  { id: "minimal", label: "Minimal", desc: "Modern çizgi sanatı", icon: "◎" },
-  { id: "gothic", label: "Gotik", desc: "Koyu mistik estetik", icon: "◗" },
+  { id: "classic", label: "Klasik", desc: "Rider-Waite-Smith geleneği" },
+  { id: "minimal", label: "Minimal", desc: "Modern çizgi sanatı" },
+  { id: "gothic",  label: "Gotik",  desc: "Koyu mistik estetik" },
 ] as const;
+
+const FOCUS_LABELS: Record<string, { label: string; icon: string }> = {
+  love: { label: "Aşk", icon: "/icons/spread-love.png" },
+  career: { label: "Kariyer", icon: "/icons/suit-pentacles.png" },
+  inner: { label: "İç Dünya", icon: "/icons/spread-shadow.png" },
+  spiritual: { label: "Ruhsal", icon: "/icons/suit-major.png" },
+  decisions: { label: "Kararlar", icon: "/icons/spread-single.png" },
+  healing: { label: "Şifa", icon: "/icons/moon-full.png" },
+};
 
 export default function ProfilPage() {
   const router = useRouter();
@@ -24,25 +32,15 @@ export default function ProfilPage() {
   const [moonPhase] = useState(getMoonPhase());
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
-  useEffect(() => {
-    const p = getProfile();
-    setProfile(p);
-    setJournalCount(getJournal().length);
-  }, []);
+  useEffect(() => { setProfile(getProfile()); setJournalCount(getJournal().length); }, []);
 
   const handleDeckChange = (deck: UserProfile["deckPreference"]) => {
     if (!profile) return;
     const updated = { ...profile, deckPreference: deck };
-    saveProfile(updated);
-    setProfile(updated);
+    saveProfile(updated); setProfile(updated);
   };
 
-  const handleReset = () => {
-    if (typeof window !== "undefined") {
-      localStorage.clear();
-      router.push("/onboarding");
-    }
-  };
+  const handleReset = () => { if (typeof window !== "undefined") { localStorage.clear(); router.push("/onboarding"); } };
 
   if (!profile) return null;
 
@@ -50,74 +48,51 @@ export default function ProfilPage() {
   const daysSince = Math.floor((Date.now() - joinDate.getTime()) / 86400000);
 
   return (
-    <main className="relative min-h-screen overflow-hidden pb-24">
+    <main className="relative min-h-screen overflow-hidden pb-28">
       <AmbientOrbs />
-      <StarField count={20} />
+      <div className="relative z-10 max-w-md mx-auto px-6 pt-12">
 
-      <div className="relative z-10 max-w-md mx-auto px-5 pt-12">
         {/* Header */}
-        <div className="text-center mb-8">
-          {/* Avatar */}
-          <div
-            className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl"
-            style={{
-              background: "linear-gradient(135deg, #4A2D8A, #2D1B5E)",
-              border: "2px solid rgba(212,175,95,0.4)",
-              boxShadow: "0 0 30px rgba(107,91,166,0.4)",
-            }}
-          >
-            ✦
-          </div>
-
-          <h1 className="font-display text-3xl gradient-gold mb-1">{profile.name}</h1>
-
+        <div className="mb-8">
+          <h1 className="font-display text-3xl gradient-gold">{profile.name}</h1>
           {profile.primaryBirthCard && (
-            <p className="text-sm" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
+            <p className="text-xs uppercase tracking-widest mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
               {profile.primaryBirthCard.nameTR} doğum kartlı
             </p>
           )}
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          <div className="glass rounded-2xl p-3 text-center">
-            <div className="font-display text-2xl gradient-gold">{profile.streak || 0}</div>
-            <div className="flex items-center justify-center gap-1 mt-1">
-              <Image src="/icons/icon-streak.png" alt="streak" width={12} height={12} style={{ objectFit: "contain" }} />
-              <span className="text-xs" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Seri</span>
+        <div className="flex gap-8">
+          <div>
+            <p className="font-display text-2xl gradient-gold">{profile.streak || 0}</p>
+            <div className="flex items-center gap-1 mt-0.5">
+              <Image src="/icons/icon-streak.png" alt="streak" width={11} height={11} style={{ objectFit: "contain" }} />
+              <span className="text-xs uppercase tracking-widest" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Seri</span>
             </div>
           </div>
-          <div className="glass rounded-2xl p-3 text-center">
-            <div className="font-display text-2xl gradient-gold">{journalCount}</div>
-            <div className="text-xs mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Okuma</div>
+          <div>
+            <p className="font-display text-2xl gradient-gold">{journalCount}</p>
+            <p className="text-xs uppercase tracking-widest mt-0.5" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Okuma</p>
           </div>
-          <div className="glass rounded-2xl p-3 text-center">
-            <div className="font-display text-2xl gradient-gold">{daysSince}</div>
-            <div className="text-xs mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Gün</div>
+          <div>
+            <p className="font-display text-2xl gradient-gold">{daysSince}</p>
+            <p className="text-xs uppercase tracking-widest mt-0.5" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Gün</p>
           </div>
         </div>
 
-        {/* Birth Card */}
+        <div className="aether-line" />
+
+        {/* Doğum kartı */}
         {profile.primaryBirthCard && (
-          <div className="glass-gold rounded-2xl p-5 mb-6">
-            <div className="text-xs uppercase tracking-widest mb-3" style={{ color: "var(--gold)", fontFamily: "var(--font-inter)" }}>
-              ✦ Doğum Kartın
-            </div>
-            <div className="flex items-start gap-4">
-              <div
-                className="w-14 h-20 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                style={{
-                  background: `linear-gradient(165deg, ${profile.primaryBirthCard.color}22, #1A0A2E)`,
-                  border: `1px solid ${profile.primaryBirthCard.color}44`,
-                }}
-              >
-                ✦
-              </div>
+          <>
+            <div className="aether-label">Doğum Kartın</div>
+            <div className="flex items-start gap-4 mb-2">
               <div>
-                <div className="font-display text-xl mb-1" style={{ color: profile.primaryBirthCard.color }}>
+                <p className="font-display text-xl mb-1" style={{ color: profile.primaryBirthCard.color }}>
                   {profile.primaryBirthCard.nameTR}
-                </div>
-                <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>
+                </p>
+                <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
                   {profile.primaryBirthCard.upright.meaningTR.split(".")[0]}.
                 </p>
                 {profile.secondaryBirthCard && (
@@ -127,187 +102,99 @@ export default function ProfilPage() {
                 )}
               </div>
             </div>
-          </div>
+            <div className="aether-line" />
+          </>
         )}
 
-        {/* Moon Phase */}
-        <div className="glass rounded-2xl p-4 mb-6">
-          <div className="flex items-center gap-3">
-            <Image src={moonPhase.icon} alt={moonPhase.name} width={40} height={40} style={{ objectFit: "contain" }} />
-            <div>
-              <div className="font-display-bold text-sm" style={{ color: "var(--text-primary)" }}>
-                {moonPhase.name}
-              </div>
-              <p className="text-xs" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
-                {moonPhase.energy}
-              </p>
-              <p className="text-xs mt-0.5" style={{ color: "var(--gold)", fontFamily: "var(--font-inter)" }}>
-                Önerilen: {moonPhase.spreadSuggestion}
-              </p>
-            </div>
+        {/* Ay fazı */}
+        <div className="aether-label">Şu An</div>
+        <div className="flex items-center gap-3 mb-2">
+          <Image src={moonPhase.icon} alt={moonPhase.name} width={32} height={32} style={{ objectFit: "contain" }} />
+          <div>
+            <p className="font-display-bold text-sm" style={{ color: "var(--text-primary)" }}>{moonPhase.name}</p>
+            <p className="text-xs" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>{moonPhase.energy}</p>
+            <p className="text-xs mt-0.5" style={{ color: "var(--gold)", fontFamily: "var(--font-inter)" }}>→ {moonPhase.spreadSuggestion}</p>
           </div>
         </div>
 
-        {/* Focus Areas */}
+        <div className="aether-line" />
+
+        {/* Odak alanları */}
         {profile.focus?.length > 0 && (
-          <div className="glass rounded-2xl p-4 mb-6">
-            <div className="text-xs uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
-              Odak Alanların
-            </div>
-            <div className="flex flex-wrap gap-2">
+          <>
+            <div className="aether-label">Odak Alanların</div>
+            <div className="flex flex-wrap gap-4 mb-4">
               {profile.focus.map(f => {
-                const labels: Record<string, { label: string; icon: string }> = {
-                  love: { label: "Aşk", icon: "♡" },
-                  career: { label: "Kariyer", icon: "◎" },
-                  inner: { label: "İç Dünya", icon: "◗" },
-                  spiritual: { label: "Ruhsal", icon: "✦" },
-                  decisions: { label: "Kararlar", icon: "⊹" },
-                  healing: { label: "Şifa", icon: "☽" },
-                };
-                const l = labels[f];
+                const l = FOCUS_LABELS[f];
                 return l ? (
-                  <span
-                    key={f}
-                    className="px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5"
-                    style={{ background: "rgba(212,175,95,0.1)", border: "1px solid rgba(212,175,95,0.25)", color: "var(--gold)" }}
-                  >
-                    {l.icon} {l.label}
-                  </span>
+                  <div key={f} className="flex items-center gap-1.5">
+                    <Image src={l.icon} alt={l.label} width={16} height={16} style={{ objectFit: "contain", opacity: 0.7 }} />
+                    <span className="text-xs uppercase tracking-widest" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>{l.label}</span>
+                  </div>
                 ) : null;
               })}
             </div>
-          </div>
+            <div className="aether-line" />
+          </>
         )}
 
-        {/* Deck Selection */}
-        <div className="glass rounded-2xl p-4 mb-6">
-          <div className="text-xs uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
-            Deste Tercihi
-          </div>
-          <div className="space-y-2">
-            {DECK_OPTIONS.map(deck => (
-              <button
-                key={deck.id}
-                onClick={() => handleDeckChange(deck.id)}
-                className="w-full flex items-center gap-3 p-3 rounded-xl transition-all text-left"
-                style={{
-                  background: profile.deckPreference === deck.id ? "rgba(212,175,95,0.1)" : "transparent",
-                  border: `1px solid ${profile.deckPreference === deck.id ? "rgba(212,175,95,0.35)" : "transparent"}`,
-                }}
-              >
-                <span style={{ color: profile.deckPreference === deck.id ? "var(--gold)" : "var(--text-muted)" }}>
-                  {deck.icon}
-                </span>
-                <div>
-                  <div className="text-sm font-display-bold" style={{ color: profile.deckPreference === deck.id ? "var(--gold)" : "var(--text-secondary)" }}>
-                    {deck.label}
-                  </div>
-                  <div className="text-xs" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
-                    {deck.desc}
-                  </div>
-                </div>
-                {profile.deckPreference === deck.id && (
-                  <div className="ml-auto w-4 h-4 rounded-full flex items-center justify-center" style={{ background: "var(--gold)" }}>
-                    <span className="text-[9px] text-black">✓</span>
-                  </div>
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Premium CTA */}
-        {!!profile.isPurchased && (
-          <div
-            className="rounded-2xl p-5 mb-6"
-            style={{
-              background: "linear-gradient(135deg, rgba(107,91,166,0.2), rgba(45,27,94,0.3))",
-              border: "1px solid rgba(107,91,166,0.4)",
-            }}
-          >
-            <div className="text-xs uppercase tracking-widest mb-2" style={{ color: "var(--indigo-light)", fontFamily: "var(--font-inter)" }}>
-              ✦ Premium
-            </div>
-            <h3 className="font-display text-lg mb-2" style={{ color: "var(--text-primary)" }}>
-              Tüm özelliklere eriş
-            </h3>
-            <ul className="space-y-1 mb-4">
-              {[
-                "Sınırsız AI destekli okuma",
-                "Celtic Cross ve tüm spreadler",
-                "Aylık ruhsal analiz",
-                "Özel spread oluşturucu",
-                "3 farklı deste stili",
-              ].map(f => (
-                <li key={f} className="flex items-center gap-2 text-sm" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>
-                  <span style={{ color: "var(--gold)" }}>✓</span> {f}
-                </li>
-              ))}
-            </ul>
-            <button className="btn-gold w-full">
-              Premium&apos;a Geç — ₺149/ay
+        {/* Deste */}
+        <div className="aether-label">Deste Tercihi</div>
+        <div className="aether-options mb-6">
+          {DECK_OPTIONS.map(deck => (
+            <button key={deck.id} onClick={() => handleDeckChange(deck.id)}
+              className={`aether-option ${profile.deckPreference === deck.id ? "active" : ""}`}>
+              <span className="aether-option-label">{deck.label}</span>
             </button>
-          </div>
-        )}
-
-        {/* Account info */}
-        <div className="glass rounded-2xl p-4 mb-4">
-          <div className="text-xs uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
-            Hesap Bilgisi
-          </div>
-          <div className="space-y-2 text-sm" style={{ fontFamily: "var(--font-inter)" }}>
-            <div className="flex justify-between">
-              <span style={{ color: "var(--text-muted)" }}>Üyelik tarihi</span>
-              <span style={{ color: "var(--text-secondary)" }}>
-                {format(joinDate, "d MMMM yyyy", { locale: tr })}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span style={{ color: "var(--text-muted)" }}>Deneyim</span>
-              <span style={{ color: "var(--text-secondary)" }}>
-                {profile.experience === "beginner" ? "Yeni başlayan" :
-                 profile.experience === "intermediate" ? "Orta düzey" : "Deneyimli"}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span style={{ color: "var(--text-muted)" }}>Plan</span>
-              <span style={{ color: !profile.isPurchased ? "var(--gold)" : "var(--text-secondary)" }}>
-                {!profile.isPurchased ? "Satın Alındı ✦" : "Ücretsiz"}
-              </span>
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* Reset */}
+        <div className="aether-line" />
+
+        {/* Premium */}
+        {!profile.isPurchased && (
+          <>
+            <div className="aether-label">Plan</div>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="font-display text-lg" style={{ color: "var(--text-primary)" }}>Ücretsiz</p>
+                <p className="text-xs" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>{Math.max(0, 3 - (profile.freeTrialUsed || 0))} deneme hakkı kaldı</p>
+              </div>
+              <button className="btn-aether" style={{ width: "auto", padding: "10px 20px", fontSize: "13px" }}>
+                ₺199&apos;a Geç
+              </button>
+            </div>
+            <div className="aether-line" />
+          </>
+        )}
+
+        {/* Hesap */}
+        <div className="aether-label">Hesap</div>
+        <div className="aether-row">
+          <span className="text-xs" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Üyelik</span>
+          <span className="text-xs ml-auto" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>{format(joinDate, "d MMMM yyyy", { locale: tr })}</span>
+        </div>
+        <div className="aether-row">
+          <span className="text-xs" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Deneyim</span>
+          <span className="text-xs ml-auto" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>
+            {profile.experience === "beginner" ? "Yeni başlayan" : profile.experience === "intermediate" ? "Orta düzey" : "Deneyimli"}
+          </span>
+        </div>
+
+        <div className="aether-line" />
+
         {!showResetConfirm ? (
-          <button
-            onClick={() => setShowResetConfirm(true)}
-            className="w-full py-3 text-sm"
-            style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}
-          >
-            Profili Sıfırla
-          </button>
+          <button onClick={() => setShowResetConfirm(true)} className="btn-aether-ghost">Profili Sıfırla</button>
         ) : (
-          <div className="glass rounded-2xl p-4 text-center">
-            <p className="text-sm mb-3" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>
-              Tüm veriler silinecek. Emin misin?
-            </p>
-            <div className="flex gap-3">
-              <button className="btn-ghost flex-1 py-2 text-sm" onClick={() => setShowResetConfirm(false)}>
-                İptal
-              </button>
-              <button
-                onClick={handleReset}
-                className="flex-1 py-2 rounded-xl text-sm"
-                style={{ background: "rgba(201,129,138,0.15)", border: "1px solid rgba(201,129,138,0.3)", color: "var(--rose)", fontFamily: "var(--font-inter)" }}
-              >
-                Sıfırla
-              </button>
+          <div>
+            <p className="text-sm text-center mb-4" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>Tüm veriler silinecek. Emin misin?</p>
+            <div className="flex gap-4">
+              <button className="btn-aether-ghost flex-1" onClick={() => setShowResetConfirm(false)}>İptal</button>
+              <button onClick={handleReset} className="flex-1 btn-aether" style={{ borderColor: "rgba(201,129,138,0.4)", color: "var(--rose)" }}>Sıfırla</button>
             </div>
           </div>
         )}
       </div>
-
       <Navigation />
     </main>
   );
