@@ -5,11 +5,11 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 
 const NAV_ITEMS = [
-  { href: "/daily",    label: "Günlük",  icon: "/icons/nav-daily.svg"   },
-  { href: "/okuma",    label: "Okuma",   icon: "/icons/nav-reading.svg" },
-  { href: "/haftalik", label: "Hafta",   icon: "/icons/nav-weekly.svg"  },
-  { href: "/journal",  label: "Arşiv",   icon: "/icons/nav-journal.svg" },
-  { href: "/profil",   label: "Profil",  icon: "/icons/nav-profile.svg" },
+  { href: "/daily",    label: "Günlük",  icon: "/icons/nav-daily.png"   },
+  { href: "/okuma",    label: "Okuma",   icon: "/icons/nav-reading.png" },
+  { href: "/haftalik", label: "Hafta",   icon: "/icons/nav-weekly.png"  },
+  { href: "/journal",  label: "Arşiv",   icon: "/icons/nav-journal.png" },
+  { href: "/profil",   label: "Profil",  icon: "/icons/nav-profile.png" },
 ];
 
 export default function Navigation() {
@@ -46,21 +46,23 @@ export default function Navigation() {
                 />
               )}
 
-              {/* SVG ikon */}
+              {/* İkon */}
               <div
                 className="transition-all"
                 style={{
-                  transform: isActive ? "scale(1.12)" : "scale(1)",
+                  transform: isActive ? "scale(1.15)" : "scale(1)",
+                  opacity: isActive ? 1 : 0.45,
                   filter: isActive
-                    ? "brightness(0) saturate(100%) invert(76%) sepia(44%) saturate(500%) hue-rotate(10deg) drop-shadow(0 0 6px rgba(212,175,95,0.6))"
-                    : "brightness(0) saturate(100%) invert(45%) sepia(10%) saturate(400%) hue-rotate(220deg)",
+                    ? "drop-shadow(0 0 8px rgba(212,175,95,0.5))"
+                    : "none",
                 }}
               >
                 <Image
                   src={item.icon}
                   alt={item.label}
-                  width={22}
-                  height={22}
+                  width={26}
+                  height={26}
+                  style={{ objectFit: "contain" }}
                 />
               </div>
 
