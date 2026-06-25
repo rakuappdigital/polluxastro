@@ -16,10 +16,10 @@ interface TarotCardDisplayProps {
 }
 
 const CARD_ICONS: Record<string, string> = {
-  wands: "/icons/element-fire.png",
-  cups: "/icons/element-water.png",
-  swords: "/icons/element-air.png",
-  pentacles: "/icons/element-earth.png",
+  wands: "/icons/suit-wands.png",
+  cups: "/icons/suit-cups.png",
+  swords: "/icons/suit-swords.png",
+  pentacles: "/icons/suit-pentacles.png",
 };
 
 const MAJOR_SYMBOLS: Record<number, string> = {

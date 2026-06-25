@@ -272,7 +272,7 @@ export default function DailyPage() {
         {/* Streak */}
         {streak > 1 && phase !== "chat" && (
           <div className="glass-gold rounded-2xl px-4 py-2.5 flex items-center gap-2 mb-5">
-            <span className="text-base">🔥</span>
+            <Image src="/icons/icon-streak.png" alt="streak" width={20} height={20} style={{ objectFit: "contain" }} />
             <span className="font-display-bold text-sm" style={{ color: "var(--gold)" }}>
               {streak} günlük seri
             </span>
@@ -558,8 +558,8 @@ export default function DailyPage() {
                 <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                   {msg.role === "assistant" && (
                     <div className="w-6 h-6 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-1"
-                      style={{ background: "rgba(212,175,95,0.2)", fontSize: "10px", color: "var(--gold)" }}>
-                      ✦
+                      style={{ background: "rgba(212,175,95,0.1)" }}>
+                      <Image src="/icons/icon-lyra.png" alt="Lyra" width={14} height={14} style={{ objectFit: "contain" }} />
                     </div>
                   )}
                   <div

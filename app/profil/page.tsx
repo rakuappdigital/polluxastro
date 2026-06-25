@@ -82,7 +82,10 @@ export default function ProfilPage() {
         <div className="grid grid-cols-3 gap-3 mb-6">
           <div className="glass rounded-2xl p-3 text-center">
             <div className="font-display text-2xl gradient-gold">{profile.streak || 0}</div>
-            <div className="text-xs mt-1" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Seri 🔥</div>
+            <div className="flex items-center justify-center gap-1 mt-1">
+              <Image src="/icons/icon-streak.png" alt="streak" width={12} height={12} style={{ objectFit: "contain" }} />
+              <span className="text-xs" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>Seri</span>
+            </div>
           </div>
           <div className="glass rounded-2xl p-3 text-center">
             <div className="font-display text-2xl gradient-gold">{journalCount}</div>

@@ -1668,7 +1668,7 @@ export const SPREADS = [
     description: "Günün enerjisini ortaya çıkaran tek bir mesaj.",
     cardCount: 1,
     positions: ["Mesaj"],
-    icon: "✦",
+    icon: "/icons/spread-single.png",
     tier: "free",
   },
   {
@@ -1678,7 +1678,7 @@ export const SPREADS = [
     description: "Durumunun üç boyutunu açan klasik spread.",
     cardCount: 3,
     positions: ["Geçmiş", "Şimdi", "Gelecek"],
-    icon: "⊹",
+    icon: "/icons/spread-three.png",
     tier: "free",
   },
   {
@@ -1688,7 +1688,7 @@ export const SPREADS = [
     description: "İlişkinin dinamiklerini ve potansiyelini keşfeder.",
     cardCount: 5,
     positions: ["Sen", "Partner", "Bağ", "Engel", "Potansiyel"],
-    icon: "♡",
+    icon: "/icons/spread-love.png",
     tier: "premium",
   },
   {
@@ -1702,7 +1702,7 @@ export const SPREADS = [
       "Olası Gelecek", "Yakın Gelecek", "Tutum", "Dış Etkiler",
       "Umut & Korku", "Sonuç"
     ],
-    icon: "✟",
+    icon: "/icons/spread-celtic.png",
     tier: "premium",
   },
   {
@@ -1712,7 +1712,7 @@ export const SPREADS = [
     description: "Gizlenen korkuları ve gölge benliği aydınlatır.",
     cardCount: 4,
     positions: ["Gölge", "Köken", "İfade", "Entegrasyon"],
-    icon: "◗",
+    icon: "/icons/spread-shadow.png",
     tier: "premium",
   },
   {
@@ -1723,7 +1723,7 @@ export const SPREADS = [
     cardCount: 12,
     positions: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
                 "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-    icon: "◎",
+    icon: "/icons/spread-year.png",
     tier: "premium",
   },
 ];

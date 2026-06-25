@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { SPREADS, TarotCard, getRandomCards } from "@/lib/tarot-data";
 import {
   getProfile, saveProfile, addJournalEntry, updateJournalEntry,
@@ -250,8 +251,8 @@ export default function OkumaPage() {
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{ background: "rgba(212,175,95,0.1)", color: "var(--gold)" }}>
-                      {spread.icon}
+                      style={{ background: "rgba(212,175,95,0.08)" }}>
+                      <Image src={spread.icon} alt={spread.nameTR} width={22} height={22} style={{ objectFit: "contain" }} />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
@@ -393,7 +394,9 @@ export default function OkumaPage() {
             <div className="glass-gold rounded-2xl p-5 mb-5">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-6 h-6 rounded-full flex items-center justify-center"
-                  style={{ background: "rgba(212,175,95,0.2)", fontSize: "10px", color: "var(--gold)" }}>✦</div>
+                  style={{ background: "rgba(212,175,95,0.1)" }}>
+                  <Image src="/icons/icon-lyra.png" alt="Lyra" width={14} height={14} style={{ objectFit: "contain" }} />
+                </div>
                 <span className="text-xs uppercase tracking-widest" style={{ color: "var(--gold)", fontFamily: "var(--font-inter)" }}>
                   Lyra {isDeep ? "— Derin Okuma" : ""}
                 </span>

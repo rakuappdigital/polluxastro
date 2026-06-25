@@ -11,10 +11,10 @@ import { tr } from "date-fns/locale";
 import Image from "next/image";
 
 const SUIT_LABELS: Record<string, { label: string; icon: string; color: string }> = {
-  wands:    { label: "Değnekler",   icon: "/icons/element-fire.png",  color: "#E8CC7A" },
-  cups:     { label: "Kupalar",     icon: "/icons/element-water.png", color: "#8B75C6" },
-  swords:   { label: "Kılıçlar",   icon: "/icons/element-air.png",   color: "#C9818A" },
-  pentacles:{ label: "Pentakıllar", icon: "/icons/element-earth.png", color: "#7A9E8A" },
+  wands:    { label: "Değnekler",   icon: "/icons/suit-wands.png",  color: "#E8CC7A" },
+  cups:     { label: "Kupalar",     icon: "/icons/suit-cups.png", color: "#8B75C6" },
+  swords:   { label: "Kılıçlar",   icon: "/icons/suit-swords.png",   color: "#C9818A" },
+  pentacles:{ label: "Pentakıllar", icon: "/icons/suit-pentacles.png", color: "#7A9E8A" },
   major:    { label: "Büyük Arkana",icon: "",                          color: "#D4AF5F" },
 };
 
