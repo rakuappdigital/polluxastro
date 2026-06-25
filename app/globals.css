@@ -213,11 +213,6 @@ body {
     );
 }
 
-/* Tüm /icons/ klasöründeki görseller arka plana karışır */
-img[src*="/icons/"] {
-  mix-blend-mode: screen;
-}
-
 /* Selection */
 ::selection {
   background: rgba(212, 175, 95, 0.25);
