@@ -1641,14 +1641,14 @@ export function calculateBirthCards(birthDate: Date): { primary: TarotCard; seco
 }
 
 export const MOON_PHASES = [
-  { name: "Yeni Ay", emoji: "🌑", energy: "Yeni başlangıçlar, niyet belirleme", spreadSuggestion: "Yeni Ay Niyeti" },
-  { name: "Hilal Ay", emoji: "🌒", energy: "Büyüme, harekete geçme", spreadSuggestion: "Büyüme Spread" },
-  { name: "İlk Dördün", emoji: "🌓", energy: "Karar verme, eylem", spreadSuggestion: "Karar Spread" },
-  { name: "Şişen Ay", emoji: "🌔", energy: "Geliştirme, ince ayar", spreadSuggestion: "İlerleme Okuma" },
-  { name: "Dolunay", emoji: "🌕", energy: "Tamamlanma, şükran, bırakma", spreadSuggestion: "Dolunay Okuma" },
-  { name: "Solan Gibbous", emoji: "🌖", energy: "Şükran, paylaşma", spreadSuggestion: "Şükran Okuma" },
-  { name: "Son Dördün", emoji: "🌗", energy: "Bırakma, temizlenme", spreadSuggestion: "Bırakma Spread" },
-  { name: "Eski Hilal", emoji: "🌘", energy: "Dinlenme, yansıma, sona erme", spreadSuggestion: "Kapanış Okuma" },
+  { name: "Yeni Ay",       icon: "/icons/moon-new.png",            energy: "Yeni başlangıçlar, niyet belirleme", spreadSuggestion: "Yeni Ay Niyeti" },
+  { name: "Hilal Ay",      icon: "/icons/moon-waxing-crescent.png",energy: "Büyüme, harekete geçme",             spreadSuggestion: "Büyüme Spread" },
+  { name: "İlk Dördün",   icon: "/icons/moon-first-quarter.png",  energy: "Karar verme, eylem",                 spreadSuggestion: "Karar Spread" },
+  { name: "Şişen Ay",     icon: "/icons/moon-waxing-gibbous.png", energy: "Geliştirme, ince ayar",              spreadSuggestion: "İlerleme Okuma" },
+  { name: "Dolunay",       icon: "/icons/moon-full.png",           energy: "Tamamlanma, şükran, bırakma",        spreadSuggestion: "Dolunay Okuma" },
+  { name: "Solan Ay",      icon: "/icons/moon-waning-gibbous.png", energy: "Şükran, paylaşma",                  spreadSuggestion: "Şükran Okuma" },
+  { name: "Son Dördün",   icon: "/icons/moon-last-quarter.png",   energy: "Bırakma, temizlenme",                spreadSuggestion: "Bırakma Spread" },
+  { name: "Eski Hilal",   icon: "/icons/moon-waning-crescent.png",energy: "Dinlenme, yansıma, sona erme",       spreadSuggestion: "Kapanış Okuma" },
 ];
 
 export function getMoonPhase(date: Date = new Date()): typeof MOON_PHASES[0] {

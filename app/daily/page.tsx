@@ -260,7 +260,9 @@ export default function DailyPage() {
             </h1>
           </div>
           <div className="text-right">
-            <div className="text-xl">{moonPhase.emoji}</div>
+            <div className="flex justify-end">
+              <Image src={moonPhase.icon} alt={moonPhase.name} width={28} height={28} style={{ objectFit: "contain" }} />
+            </div>
             <div className="text-[10px] mt-0.5 uppercase tracking-wide" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter)" }}>
               {moonPhase.name}
             </div>
@@ -285,7 +287,7 @@ export default function DailyPage() {
           <div className="animate-fadeInUp">
             {/* Moon energy */}
             <div className="glass rounded-2xl p-4 mb-6 flex gap-3">
-              <span className="text-xl mt-0.5">{moonPhase.emoji}</span>
+              <Image src={moonPhase.icon} alt={moonPhase.name} width={24} height={24} style={{ objectFit: "contain", marginTop: "2px" }} />
               <div>
                 <div className="text-xs uppercase tracking-widest mb-1" style={{ color: "var(--gold)", fontFamily: "var(--font-inter)" }}>
                   {moonPhase.name} Enerjisi
@@ -362,7 +364,9 @@ export default function DailyPage() {
         {/* ─── MANTRA ────────────────────────────────────────────── */}
         {phase === "intention-mantra" && (
           <div className="animate-fadeInUp text-center">
-            <div className="text-4xl mb-6 animate-pulse-glow">{moonPhase.emoji}</div>
+            <div className="flex justify-center mb-6 animate-pulse-glow">
+              <Image src={moonPhase.icon} alt={moonPhase.name} width={64} height={64} style={{ objectFit: "contain" }} />
+            </div>
 
             <div
               className="rounded-2xl p-6 mb-8 text-center"

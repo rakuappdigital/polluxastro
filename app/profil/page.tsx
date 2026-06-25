@@ -9,6 +9,7 @@ import Navigation from "@/components/layout/Navigation";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { getMoonPhase } from "@/lib/tarot-data";
+import Image from "next/image";
 
 const DECK_OPTIONS = [
   { id: "classic", label: "Klasik", desc: "Rider-Waite-Smith geleneği", icon: "✦" },
@@ -129,7 +130,7 @@ export default function ProfilPage() {
         {/* Moon Phase */}
         <div className="glass rounded-2xl p-4 mb-6">
           <div className="flex items-center gap-3">
-            <span className="text-3xl">{moonPhase.emoji}</span>
+            <Image src={moonPhase.icon} alt={moonPhase.name} width={40} height={40} style={{ objectFit: "contain" }} />
             <div>
               <div className="font-display-bold text-sm" style={{ color: "var(--text-primary)" }}>
                 {moonPhase.name}
